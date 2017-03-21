@@ -106,7 +106,7 @@ public class DataDAO {
 			 
 			sqlCreateTable = "CREATE TABLE vk_image_list("
 					  +"fesno     NUMBER, "
-					  + "CONSTRAINT vk_image_list_pk PRIMARY KEY(fesno), "
+					  +"image     VARCHAR2(100), "
 					  + "CONSTRAINT vk_image_list_fk FOREIGN KEY(fesno) REFERENCES vk_main(fesno))";
 			
 			ps = conn.prepareStatement(sqlCreateTable);
@@ -128,32 +128,24 @@ public class DataDAO {
 		numOfImages = list.size();
 		try{
 			getConnection();
-			while(numOfsqlColumn < numOfImages){
-				String sqlAdd = "ALTER TABLE vk_image_list "
-						+ "ADD image" + numOfsqlColumn + " VARCHAR2(100)";
-				ps=conn.prepareStatement(sqlAdd);
-				ps.executeUpdate();
-				numOfsqlColumn++;
-			}
+//			while(numOfsqlColumn < numOfImages){
+//				String sqlAdd = "ALTER TABLE vk_image_list "
+//						+ "ADD image" + numOfsqlColumn + " VARCHAR2(100)";
+//				ps=conn.prepareStatement(sqlAdd);
+//				ps.executeUpdate();
+//				numOfsqlColumn++;
+//			}
 			for(int i = 0; i < numOfImages; i++){
 				int fesno = vo.getFesNo();
-				String sqlInsert = null;
-				if(i == 0){
-					sqlInsert = "INSERT INTO vk_image_list(fesno, image" + i + ")"
-				    + "VALUES(" + fesno + ", ?)";
-					ps = conn.prepareStatement(sqlInsert);
-					ps.setString(1, list.get(i));
-					ps.executeUpdate();
-				} else {
-					sqlInsert = 
-							"UPDATE vk_image_list "
-							+"SET image" + i + "= ?"
-							+ "WHERE fesno =" + fesno;
-					ps = conn.prepareStatement(sqlInsert);
-					ps.setString(1, list.get(i));
-					ps.executeUpdate();
-				}
+			//	String sqlInsert = null;
+				
+			String	sqlInsert = "INSERT INTO vk_image_list(fesno, image)"
+			    + "VALUES(" + fesno + ", ?)";
+				ps = conn.prepareStatement(sqlInsert);
+				ps.setString(1, list.get(i));
+				ps.executeUpdate();
 			}
+		
 			ps.close();
 	
 		}catch(Exception ex){
