@@ -34,7 +34,7 @@ public class VisitKoreaDAO {
 		<p class="info1">
 			<span class="skip">조회수</span> <span class="read">476278</span>
 			<span class="skip">작성일</span> <span class="time">12.05</span>
-		</p>
+		</p> 
 		<p class="txt">
 			10만여 평의 야외 정원 곳곳을 다채로운 조명과 빛을 이용하여 특별한 주제를 가지고 표현한 야간 조명 점등행사이다. 자연과 빛의 조화를 추구하며 국내 최초로 시도된 새로운 빛의 풍경인 ‘오색별빛정원전’은, 인공적인 조명 속에서도 한국 자연의 미(美)를...
 		</p>

@@ -103,7 +103,7 @@ public class DataDAO {
 			
 			ps = conn.prepareStatement(sqlCreateTable);
 			ps.executeUpdate();
-			
+			 
 			sqlCreateTable = "CREATE TABLE vk_image_list("
 					  +"fesno     NUMBER, "
 					  + "CONSTRAINT vk_image_list_pk PRIMARY KEY(fesno), "
