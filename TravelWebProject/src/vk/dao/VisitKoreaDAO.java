@@ -6,7 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+/**
+ * 
+ * @author mdSHin
+ * vkDAO 주의사항
 
+ */
 public class VisitKoreaDAO {
 	
 	private String addr1 = "https://korean.visitkorea.or.kr/kor/bz15/where/festival/festival.jsp?areaCode=&year=2017&keyword=&type=&gotoPage=";
@@ -64,7 +69,7 @@ public class VisitKoreaDAO {
 					vo.setFesNo(fesNo++);
 					vo.setUrl("https://korean.visitkorea.or.kr/kor/bz15/where/festival/" + eConAddr.attr("href"));
 					vo.setTitle(eTitle.text());
-					vo.setContentShort(eContent.text().replaceAll("\u00a0", " "));
+					vo.setContentShort(removeTags(eContent.text()));
 					vo.setMainLoc(eMainLoc.text());
 					vo.setDate(eDate.text().replace("진행기간 : ", ""));
 					
@@ -131,11 +136,11 @@ public class VisitKoreaDAO {
 						String temp = ul_list_second.get(j).text();
 						
 						if(j == 0){
-							list_summary.add(temp.replaceAll("\u00a0", " "));
+							list_summary.add(removeTags(temp));
 						} else {
 							
 							if(!list_summary.get(j - 1).contains(temp)){
-								list_summary.add(temp.replaceAll("\u00a0", " "));
+								list_summary.add(removeTags(temp));
 							} else 
 								list_summary.add("DUPLICATE");
 						}
@@ -171,11 +176,11 @@ public class VisitKoreaDAO {
 					for(int j = 0; j < ul_list_third.size(); j++){
 						String temp = ul_list_third.get(j).text();
 						if(j == 0){
-							list_instruction.add(temp.replaceAll("\u00a0", " "));
+							list_instruction.add(removeTags(temp)); // *****
 						} else {
 							
 							if(!list_instruction.get(j - 1).contains(temp)){
-								list_instruction.add(temp.replaceAll("\u00a0", " "));
+								list_instruction.add(removeTags(temp)); // *****
 							} else 
 								list_instruction.add("DUPLICATE");
 						}
@@ -196,6 +201,8 @@ public class VisitKoreaDAO {
 					//test only ******
 					dao.setMain(vo);
 					dao.setImageList(vo);
+					dao.setSecondList(vo);
+					dao.setThirdList(vo);
 				//	break;// test only ********
 				}
 				pageNumber++;
@@ -207,7 +214,13 @@ public class VisitKoreaDAO {
 			ex.printStackTrace();
 		}
 	}
-	
+	public static String removeTags(String s){
+		String[] tags = {"\u00a0", "\u003E", "\u003C"};
+		for(int i = 0; i < tags.length; i++){
+			s = s.replaceAll(tags[i], "");
+		}
+		return s;
+	}
 	public static void main(String[] args){
 		new VisitKoreaDAO().getAllData();
 	}

@@ -6,6 +6,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author mdShin
+ *  테이블 생성순서
+ * 1) vk_main
+ * 	a) vk_image_list
+ * 	b) vk_second_list
+ * 	c)..
+ * 
+ * vk_main이 다른 리스트에서 사용하는 primary key를 보유하고 있기 때문에,
+ * list 테이블 생성전에 꼭 생성 해야함
+ *
+ *
+ */
 public class DataDAO {
 	
 	private Connection conn;
@@ -13,8 +27,10 @@ public class DataDAO {
 	private final String URL="jdbc:oracle:thin:@211.238.142.230:1521:ORCL";
 	private static DataDAO dao;
 	private int numOfImages;
-	private int numOfsqlColumn = 0;
+	//private final static int NUMBER_OF_TABLES = 4;
+	//private int numOfsqlColumn = 0;
 	//드라이버 등록 
+	
 	public DataDAO(){
 		numOfImages = 0;
 		try{
@@ -82,38 +98,53 @@ public class DataDAO {
 		}
 	}
 	public void dropAndCreateImageTable(){
-		String sqldrop = "DROP TABLE vk_image_list CASCADE CONSTRAINTS";
 		
-		String sqlCreateTable = "CREATE TABLE vk_main( "
-				  + "fesno          NUMBER, "
-				  + "maintitle     VARCHAR2(100) CONSTRAINT vk_main_maintitle_nn NOT NULL, "
-				  + "maincontent   CLOB, "
-				  + "mainloc        VARCHAR2(100), "
-				  + "fesdate        VARCHAR2(50), "
-				  + "CONSTRAINT vk_main_fesno_pk PRIMARY KEY(fesno) )";
+		
+		String[] tableName = {"vk_main", "vk_image_list", 
+				"vk_second_list", "vk_third_list"};
 		try{
 			getConnection();
+			for(int i = 0; i < tableName.length; i++){
+				String sqldrop = "DROP TABLE " + tableName[i] + " CASCADE CONSTRAINTS";
+				ps=conn.prepareStatement(sqldrop);
+				ps.executeUpdate();
+			}
 			
-			ps=conn.prepareStatement(sqldrop);
-			ps.executeUpdate();
-			
-			sqldrop = "DROP TABLE vk_main CASCADE CONSTRAINTS";
-			ps=conn.prepareStatement(sqldrop);
-			ps.executeUpdate();
-			
-			ps = conn.prepareStatement(sqlCreateTable);
-			ps.executeUpdate();
-			 
-			sqlCreateTable = "CREATE TABLE vk_image_list("
+//			sqldrop = "DROP TABLE vk_main CASCADE CONSTRAINTS";
+//			ps=conn.prepareStatement(sqldrop);
+//			ps.executeUpdate();
+			String[] tableDesc = {"CREATE TABLE vk_main( "
+					  + "fesno          NUMBER, "
+					  + "maintitle     VARCHAR2(100) CONSTRAINT vk_main_maintitle_nn NOT NULL, "
+					  + "maincontent   CLOB, "
+					  + "mainloc        VARCHAR2(100), "
+					  + "fesdate        VARCHAR2(50), "
+					  + "CONSTRAINT vk_main_fesno_pk PRIMARY KEY(fesno) )",
+					  
+					  "CREATE TABLE vk_image_list("
 					  +"fesno     NUMBER, "
 					  +"image     VARCHAR2(100), "
-					  + "CONSTRAINT vk_image_list_fk FOREIGN KEY(fesno) REFERENCES vk_main(fesno))";
-			
-			ps = conn.prepareStatement(sqlCreateTable);
-			ps.executeUpdate();
-			
-			
-			
+					  +"CONSTRAINT vk_image_list_fk FOREIGN KEY(fesno) "
+					  +"REFERENCES vk_main(fesno))",
+					  
+					  "CREATE TABLE vk_second_list("
+					  +"fesno NUMBER, "
+					  +"second_list_title VARCHAR(20), "
+					  +"second_list CLOB, "
+					  +"CONSTRAINT vk_second_list_fk FOREIGN KEY(fesno) "
+					  +"REFERENCES vk_main(fesno))",
+					  
+					  "CREATE TABLE vk_third_list("
+					  +"fesno NUMBER, "
+					  +"third_list_title VARCHAR(20), "
+					  +"third_list CLOB, "
+					  +"CONSTRAINT vk_third_list_fk FOREIGN KEY(fesno) "
+					  +"REFERENCES vk_main(fesno))"
+			};
+			for(int i = 0; i < tableDesc.length; i++){
+				ps = conn.prepareStatement(tableDesc[i]);
+				ps.executeUpdate();
+			}
 		
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
@@ -139,9 +170,9 @@ public class DataDAO {
 				int fesno = vo.getFesNo();
 			//	String sqlInsert = null;
 				
-			String	sqlInsert = "INSERT INTO vk_image_list(fesno, image)"
+			String	insert = "INSERT INTO vk_image_list(fesno, image)"
 			    + "VALUES(" + fesno + ", ?)";
-				ps = conn.prepareStatement(sqlInsert);
+				ps = conn.prepareStatement(insert);
 				ps.setString(1, list.get(i));
 				ps.executeUpdate();
 			}
@@ -155,5 +186,88 @@ public class DataDAO {
 			disConnection();
 		}
 	}
+	
+	public void setSecondList(VisitKoreaVO vo){
+		ArrayList<String> list = vo.getSummary();
+		int numOfContents = list.size();
+		try{
+			getConnection();
+
+			for(int i = 0; i < numOfContents; i++){
+				int fesno = vo.getFesNo();
+			//	String sqlInsert = null;
+				
+//			String	sqlInsert = "INSERT INTO vk_image_list(fesno, image)"
+//			    + "VALUES(" + fesno + ", ?)";
+				String insert = "INSERT INTO vk_second_list("
+						+ "fesno, second_list_title, second_list)"
+						+ "VALUES(" + fesno + ",?,?)";
+				ps = conn.prepareStatement(insert);
+				//text.substring(0, text.indexOf(' '));
+				String temp = list.get(i);
+				if(temp.indexOf(' ') != -1){
+					if(temp.contains("출 연")){
+						ps.setString(1, "출연");
+						ps.setString(2, temp.replace("출 연 ", ""));
+					} else if(temp.contains("줄 거 리")){
+						ps.setString(1, "줄거리");
+						ps.setString(2, temp.replace("줄 거 리 ", ""));
+					} else{
+						ps.setString(1, temp.substring(0, temp.indexOf(' ')));
+						ps.setString(2, temp.substring(temp.indexOf(' ')+1));
+					}
+				} else{
+					ps.setString(1, temp);
+					ps.setString(2, " ");
+				}
+				ps.executeUpdate();
+			}
+		
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+	}
 	//
+	public void setThirdList(VisitKoreaVO vo){
+		ArrayList<String> list = vo.getInstruction();
+		int numOfContents = list.size();
+		try{
+			getConnection();
+
+			for(int i = 0; i < numOfContents; i++){
+				int fesno = vo.getFesNo();
+			//	String sqlInsert = null;
+				
+//			String	sqlInsert = "INSERT INTO vk_image_list(fesno, image)"
+//			    + "VALUES(" + fesno + ", ?)";
+				String insert = "INSERT INTO vk_third_list("
+						+ "fesno, third_list_title, third_list)"
+						+ "VALUES(" + fesno + ",?,?)";
+				ps = conn.prepareStatement(insert);
+				//text.substring(0, text.indexOf(' '));
+				String temp = list.get(i);
+				if(temp.indexOf(' ') != -1){	
+					ps.setString(1, temp.substring(0, temp.indexOf(' ')));
+					ps.setString(2, temp.substring(temp.indexOf(' ')+1));
+				} else{
+					ps.setString(1, temp);
+					ps.setString(2, " ");
+				}
+				ps.executeUpdate();
+			}
+		
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+	}
 }
