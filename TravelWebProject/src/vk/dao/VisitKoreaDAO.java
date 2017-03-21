@@ -28,7 +28,7 @@ public class VisitKoreaDAO {
 			int numOfContents = Integer.parseInt(conNum_.text().substring(8, 10));
 			
 			System.out.println("content number: " + numOfContents);
-/*
+/* 
 	<div class="cnt">
 		<h3>아침고요수목원 오색별빛정원전</h3>
 		<p class="info1">

@@ -14,7 +14,7 @@ public class DataDAO {
 	private static DataDAO dao;
 	private int numOfImages;
 	private int numOfsqlColumn = 0;
-	//드라이버 등록
+	//드라이버 등록 
 	public DataDAO(){
 		numOfImages = 0;
 		try{
