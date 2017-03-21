@@ -12,7 +12,7 @@ public class VisitKoreaDAO {
 	private String addr1 = "https://korean.visitkorea.or.kr/kor/bz15/where/festival/festival.jsp?areaCode=&year=2017&keyword=&type=&gotoPage=";
 	private String addr2 = "&listType=rdesc&cid=&out_service=";
 	private int pageNumber = 1;
-
+	private DataDAO dao = new DataDAO();
 	public void getAllData(){
 		int fesNo = 1;
 		try{
@@ -21,6 +21,7 @@ public class VisitKoreaDAO {
 
 			<p class="total bottom">총 게시물 : 67건 , 페이지 : 1/7</p>
 			 */
+			dao.dropAndCreateImageTable();
 			Document contents = Jsoup.connect(addr1 + pageNumber + addr2).get();
 			Elements conNum = contents.select("div.doc p.total");
 			Element conNum_ = conNum.get(0);
@@ -41,7 +42,6 @@ public class VisitKoreaDAO {
 			<span class="skip">축제지역</span> <span class="city">경기도 가평군</span>
 			<span class="date">진행기간 : 2016.12.02 ~ 2017.03.26</span>
 		</p>
-
 */			
 			while(numOfContents > 0){
 				Document doc = Jsoup.connect(addr1 + pageNumber + addr2).get();
@@ -69,6 +69,7 @@ public class VisitKoreaDAO {
 					vo.setDate(eDate.text().replace("진행기간 : ", ""));
 					
 					//test only---------------------------------------
+					System.out.println("행사번호: " + vo.getFesNo());
 					System.out.println(vo.getTitle());
 					System.out.println(vo.getContentShort());
 					System.out.println("mainLoc: " + vo.getMainLoc());
@@ -84,7 +85,7 @@ public class VisitKoreaDAO {
 						Element eImage_ = eImage.get(j);
 						String url = eImage_.attr("src");
 						vo.getImage_list().add(url);
-						System.out.println("image_url: " + url); // test only *****
+						System.out.println( (j+1) + ": " + url); // test only *****
 					}
 					
 					for(int j = 0; j < ul_list_first.size(); j++){
@@ -193,7 +194,8 @@ public class VisitKoreaDAO {
 						System.out.println("이용안내: " + str);
 					}
 					//test only ******
-					
+					dao.setMain(vo);
+					dao.setImageList(vo);
 				//	break;// test only ********
 				}
 				pageNumber++;
