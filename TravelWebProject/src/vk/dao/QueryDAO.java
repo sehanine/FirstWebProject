@@ -86,6 +86,55 @@ public class QueryDAO {
 		}
 		return result;
 	}
+	public ArrayList<String> getImage_list(int fesno){
+		ArrayList<String> list = new ArrayList<>();
+		
+		try{
+			getConnection();
+			String sql = "SELECT image FROM vk_image_list where fesno = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, fesno);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				list.add(rs.getString(1)); // has onlyone element
+			}
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+		for(String str: list){
+			System.out.println(str);
+		}
+		return list;
+	}
+
+	public ArrayList<String> getSecond_list(int fesno){
+		ArrayList<String> list = new ArrayList<>();
+		try{
+			getConnection();
+			String sql = "SELECT second_list_title, second_list "
+					+ "FROM vk_second_list WHERE fesno= ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, fesno);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				
+			}
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+		return list;
+	}
 /*
   	try{
 			getConnection();
