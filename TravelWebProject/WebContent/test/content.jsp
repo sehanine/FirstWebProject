@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+    pageEncoding="EUC-KR" import="vk.dao.DataDAO"%>
+<%
+	String pageNum = request.getParameter("page");
+	if(pageNum == null)
+		pageNum = "PAGE_NOT_FOUND";
+	int curpage = Integer.parseInt(pageNum);
+	DataDAO dao =new DataDAO();
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
