@@ -1,4 +1,4 @@
-package vk.dao;
+package web.dao;
 /**
  * @author sistH
  *	

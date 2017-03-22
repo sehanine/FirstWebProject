@@ -1,4 +1,4 @@
-package vk.dao;
+package web.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,11 +7,34 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class QueryDAO {
+	
 	private Connection conn;
 	private PreparedStatement ps;
 	private final String URL="jdbc:oracle:thin:@211.238.142.230:1521:ORCL";
-	private static DataDAO dao;
-	
+	//private static DataDAO dao;
+	/**
+	 * Äõ¸®¹® ÅÛÇÃ¸´
+	  	try{
+				getConnection();
+				String sql = "INSERT QUERY";
+				ps = conn.prepareStatement(sql);
+				ps.setString(parameterIndex, x);
+				ResultSet rs = ps.executeQuery();
+				rs.next();
+				//TODO
+				ps.close();
+		
+			}catch(Exception ex){
+				System.out.println(ex.getMessage());
+				ex.printStackTrace();
+			}finally{
+				disConnection();
+			}
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+	 */
 	public QueryDAO(){
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -48,6 +71,8 @@ public class QueryDAO {
 			getConnection();
 			String sql = "SELECT  maintitle, maincontent, mainloc, fesdate "
 					+ "FROM vk_main WHERE fesno = ?";
+			
+			// maintitle, maincontent, mainLoc, fesdate
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, fesno);
 			ResultSet rs = ps.executeQuery();
@@ -107,23 +132,23 @@ public class QueryDAO {
 		}finally{
 			disConnection();
 		}
-		for(String str: list){
-			System.out.println(str);
-		}
+	
 		return list;
 	}
-
-	public ArrayList<String> getSecond_list(int fesno){
-		ArrayList<String> list = new ArrayList<>();
+	public ArrayList<ListVO> getFirst_list(int fesno){
+		ArrayList<ListVO> list = new ArrayList<>();
 		try{
 			getConnection();
-			String sql = "SELECT second_list_title, second_list "
-					+ "FROM vk_second_list WHERE fesno= ?";
+			String sql = "SELECT first_list_title, first_list "
+					+ "FROM vk_first_list WHERE fesno= ?";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, fesno);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				
+				ListVO vo = new ListVO();
+				vo.setTitle(rs.getString(1));
+				vo.setContent(rs.getString(2));
+				list.add(vo);
 			}
 			ps.close();
 	
@@ -135,15 +160,21 @@ public class QueryDAO {
 		}
 		return list;
 	}
-/*
-  	try{
+	public ArrayList<ListVO> getSecond_list(int fesno){
+		ArrayList<ListVO> list = new ArrayList<>();
+		try{
 			getConnection();
-			String sql = "INSERT QUERY";
+			String sql = "SELECT second_list_title, second_list "
+					+ "FROM vk_second_list WHERE fesno= ?";
 			ps = conn.prepareStatement(sql);
-			ps.setString(parameterIndex, x);
+			ps.setInt(1, fesno);
 			ResultSet rs = ps.executeQuery();
-			rs.next();
-			//TODO
+			while(rs.next()){
+				ListVO vo = new ListVO();
+				vo.setTitle(rs.getString(1));
+				vo.setContent(rs.getString(2));
+				list.add(vo);
+			}
 			ps.close();
 	
 		}catch(Exception ex){
@@ -152,5 +183,32 @@ public class QueryDAO {
 		}finally{
 			disConnection();
 		}
- */
+		return list;
+	}
+	public ArrayList<ListVO> getThird_list(int fesno){
+		ArrayList<ListVO> list = new ArrayList<>();
+		try{
+			getConnection();
+			String sql = "SELECT third_list_title, third_list "
+					+ "FROM vk_third_list WHERE fesno= ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, fesno);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				ListVO vo = new ListVO();
+				vo.setTitle(rs.getString(1));
+				vo.setContent(rs.getString(2));
+				list.add(vo);
+			}
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+		return list;
+	}
+
 }

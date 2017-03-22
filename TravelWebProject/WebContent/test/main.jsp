@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR" import="vk.dao.*, java.util.ArrayList" %>
+    pageEncoding="EUC-KR" import="web.dao.*, java.util.ArrayList" %>
 <%
 	QueryDAO dao = new QueryDAO();
 	ArrayList<String> list = new ArrayList<>();
@@ -32,9 +32,7 @@
 			</tr>
 			<%
 				}
-			%>
-			
-		
+			%>	
 		</table>
 	</center>
 </body>

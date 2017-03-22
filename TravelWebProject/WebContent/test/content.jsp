@@ -1,14 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR" import="vk.dao.QueryDAO, java.util.ArrayList, vk.dao.ListVO"%>
+    pageEncoding="EUC-KR" import="web.dao.*, java.util.ArrayList"%>
 <%
+	
 	String pageNum = request.getParameter("page");
+	int TITLE_NAME_INDEX = 0;
 	if(pageNum == null)
 		pageNum = "PAGE_NOT_FOUND";
-	int curpage = Integer.parseInt(pageNum);
+	int fesno = Integer.parseInt(pageNum);
 	QueryDAO dao =new QueryDAO();
-	ArrayList<String> image_list = dao.getImage_list(curpage);
-	ArrayList<String> main_list = dao.getMainVO(curpage);
-	ArrayList<ListVO> second_list;
+	ArrayList<String> image_list = dao.getImage_list(fesno);
+	ArrayList<String> main_list = dao.getMainVO(fesno);
+	ArrayList<ListVO> first_list = dao.getFirst_list(fesno);
+	ArrayList<ListVO> second_list = dao.getSecond_list(fesno);
+	ArrayList<ListVO> third_list = dao.getSecond_list(fesno);
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -18,7 +23,7 @@
 </head>
 <body>
 <center>
-	<h3><%=main_list.get(0) %></h3>
+	<h3><%=main_list.get(TITLE_NAME_INDEX) %></h3>
 		<table>
 			
 			<tr>
@@ -32,9 +37,60 @@
 					}
 				%>
 			</tr>
+			
 		
 		</table>
+		
 	</center>
+		<%
+			for(int i = 0; i < first_list.size(); i++){
+		%>
+			<ul>
 	
+				<li>
+					<b><%=first_list.get(i).getTitle() %></b>
+					<span><%=first_list.get(i).getContent() %></span>
+				</li>
+	
+			</ul>
+		<%
+			}
+		%>
+<!-- 
+	행사기간 
+	위치 
+	행사장소
+	연 락 처 
+	홈페이지
+ -->
+		<%
+			for(int i = 0; i < second_list.size(); i++){
+		%>
+			<ul>
+	
+				<li>
+					<b><%=second_list.get(i).getTitle() %></b>
+					<span><%=second_list.get(i).getContent() %></span>
+				</li>
+	
+			</ul>
+		<%
+			}
+		%>
+		
+		<%
+			for(int i = 0; i < third_list.size(); i++){
+		%>
+			<ul>
+	
+				<li>
+					<b><%=third_list.get(i).getTitle() %></b>
+					<span><%=third_list.get(i).getContent() %></span>
+				</li>
+	
+			</ul>
+		<%
+			}
+		%>
 </body>
 </html>
