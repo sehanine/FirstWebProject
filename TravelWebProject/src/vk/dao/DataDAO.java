@@ -100,7 +100,7 @@ public class DataDAO {
 	public void dropAndCreateImageTable(){
 		
 		
-		String[] tableName = {"vk_main", "vk_image_list", 
+		String[] tableName = {"vk_main", "vk_image_list", "vk_first_list",
 				"vk_second_list", "vk_third_list"};
 		try{
 			getConnection();
@@ -113,7 +113,8 @@ public class DataDAO {
 //			sqldrop = "DROP TABLE vk_main CASCADE CONSTRAINTS";
 //			ps=conn.prepareStatement(sqldrop);
 //			ps.executeUpdate();
-			String[] tableDesc = {"CREATE TABLE vk_main( "
+			String[] tableDesc = {
+					  "CREATE TABLE vk_main( "
 					  + "fesno          NUMBER, "
 					  + "maintitle     VARCHAR2(100) CONSTRAINT vk_main_maintitle_nn NOT NULL, "
 					  + "maincontent   CLOB, "
@@ -127,6 +128,13 @@ public class DataDAO {
 					  +"CONSTRAINT vk_image_list_fk FOREIGN KEY(fesno) "
 					  +"REFERENCES vk_main(fesno))",
 					  
+					  "CREATE TABLE vk_first_list("
+					  +"fesno NUMBER, "
+					  +"first_list_title VARCHAR(100), "
+					  +"first_list VARCHAR(100), "
+					  +"CONSTRAINT first FOREIGN KEY(fesno) "
+					  +"REFERENCES vk_main(fesno))",
+						
 					  "CREATE TABLE vk_second_list("
 					  +"fesno NUMBER, "
 					  +"second_list_title VARCHAR(20), "
@@ -186,7 +194,47 @@ public class DataDAO {
 			disConnection();
 		}
 	}
+	public void setFirstList(VisitKoreaVO vo){
+/*		
+		행사기간 2016.12.02 ~ 2017.03.26
+		위치 경기도 가평군 상면 수목원로 432 (상면)
+		행사장소 경기 가평군 아침고요수목원 내 주요정원
+		연 락 처 1544-6703
+		홈페이지 http://morningcalm.co.kr
+		*/
+		try{
+			getConnection();
+			String insert = "INSERT INTO vk_first_list("
+					+ "fesno, first_list_title, first_list)"
+					+ "VALUES(" + vo.getFesNo() + ",?,?)";
+			
+			ps=conn.prepareStatement(insert);
+			
+			ps.setString(1, "행사기간");
+			ps.setString(2, vo.getDate());
+			ps.executeUpdate();
+			ps.setString(1, "위치");
+			ps.setString(2, vo.getLocAddr());
+			ps.executeUpdate();
+			ps.setString(1, "행사장소");
+			ps.setString(2, vo.getLoc());
+			ps.executeUpdate();
+			ps.setString(1, "연락처");
+			ps.setString(2, vo.getTel());
+			ps.executeUpdate();
+			ps.setString(1, "홈페이지");
+			ps.setString(2, vo.getHomepage());
+			ps.executeUpdate();
+		
+			ps.close();
 	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+	}
 	public void setSecondList(VisitKoreaVO vo){
 		ArrayList<String> list = vo.getSummary();
 		int numOfContents = list.size();
@@ -270,4 +318,5 @@ public class DataDAO {
 			disConnection();
 		}
 	}
+
 }

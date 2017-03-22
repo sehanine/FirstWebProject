@@ -93,6 +93,13 @@ public class VisitKoreaDAO {
 						System.out.println( (j+1) + ": " + url); // test only *****
 					}
 					
+					/*
+					 * 행사기간
+						위치 
+						행사장소
+						연 락 처
+						홈페이지 
+					 */
 					for(int j = 0; j < ul_list_first.size(); j++){
 						String temp = ul_list_first.get(j).text();
 						if(temp.contains("위치")){
@@ -106,6 +113,10 @@ public class VisitKoreaDAO {
 						} else {
 							vo.setLocAddr(null);
 						}
+						/*
+						 * vo.setLocAddr(temp.replace("위치 ", ""));
+						 * vo.setLoc(temp.replace("행사장소 ", ""));
+						 */
 					}
 					//test output only *****
 					System.out.println(vo.getLocAddr());
@@ -201,6 +212,7 @@ public class VisitKoreaDAO {
 					//test only ******
 					dao.setMain(vo);
 					dao.setImageList(vo);
+					dao.setFirstList(vo);
 					dao.setSecondList(vo);
 					dao.setThirdList(vo);
 				//	break;// test only ********
