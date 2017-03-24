@@ -37,8 +37,7 @@
 					}
 				%>
 			</tr>
-			
-		
+	
 		</table>
 		
 	</center>

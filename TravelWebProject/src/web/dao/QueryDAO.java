@@ -65,7 +65,7 @@ public class QueryDAO {
 			System.out.println(ex.getMessage());
 		}
 	}
-	public ArrayList<String> getMainVO(int fesno){
+	public ArrayList<String> getMainVO(int fesno){ // test use only ****
 		ArrayList<String> list = new ArrayList<>();
 		try{
 			getConnection();
@@ -92,7 +92,8 @@ public class QueryDAO {
 		}
 		return list; 
 	}
-	public int getTotalPage(){
+	
+	public int getTotalPage(){  // test use only ************
 		int result = 0;
 		try{
 			getConnection();
@@ -109,6 +110,69 @@ public class QueryDAO {
 		}finally{
 			disConnection();
 		}
+		return result;
+	}
+	public ArrayList<MainVO> boardListData(int page){
+		ArrayList<MainVO> list = new ArrayList<>();
+		
+		try{
+			getConnection();
+			int rowSize = 6;
+			int start = (rowSize * page)-(rowSize - 1);
+			int end = rowSize * page;
+			/*
+			 *  1-10 11-20 			1-5 6-10
+			 */
+
+			String sql_ = "SELECT fesno, maintitle, maincontent, mainloc, fesdate "
+					+"FROM (SELECT fesno, maintitle, maincontent, mainloc, fesdate FROM vk_main ORDER BY  fesno ASC) "
+					+"WHERE fesno BETWEEN " + start + " AND " + end;
+			ps=conn.prepareStatement(sql_);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				// maintitle, maincontent, mainloc, fesdate
+				MainVO vo = new MainVO();
+				vo.setFesno(rs.getInt(1));
+				vo.setMaintitle(rs.getString(2));
+				System.out.println(vo.getMaintitle());
+				vo.setMaincontent(rs.getString(3));
+				vo.setMainloc(rs.getString(4));
+				vo.setFesdate(rs.getString(5));
+				list.add(vo);
+			}
+			rs.close();
+			System.out.println("list done");
+			for(MainVO vo: list){
+				System.out.println(vo.getMaintitle());
+			}
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}finally{
+			disConnection();
+		}
+		
+		return list;
+	}
+	
+	public int getDivPage(){
+		int  result = 0;
+		
+		try{
+			getConnection();
+			String sql = "SELECT CEIL(COUNT(*)/6) FROM vk_main";
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			result = rs.getInt(1);
+			rs.close();
+			
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			disConnection();
+		}
+		
 		return result;
 	}
 	public ArrayList<String> getImage_list(int fesno){
@@ -210,5 +274,8 @@ public class QueryDAO {
 		}
 		return list;
 	}
+
+	
+	
 
 }
