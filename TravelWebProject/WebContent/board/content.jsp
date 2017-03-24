@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR" import="com.sist.dao.*"%>
+    pageEncoding="EUC-KR" import="board.dao.*"%>
     
 <%
 	//1.사용자 요청 데이터  content.jsp?no=20&

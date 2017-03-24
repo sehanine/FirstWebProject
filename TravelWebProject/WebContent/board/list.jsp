@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR" import= "java.util.*,com.sist.dao.*,java.text.*"%>
+    pageEncoding="EUC-KR" import= "java.util.*,board.dao.*,java.text.*"%>
 <% 
 	String strPage=request.getParameter("page");
 	if(strPage==null)
@@ -21,7 +21,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>Insert title here</title>
-<style>
+<link rel="stylesheet" type="text/css" href="table.css">
+<style type="text/css">
 	td,th{
 		font-family: 맑은 고딕;
 		font-size: 9pt;
@@ -35,21 +36,25 @@
 		color: green;
 	}
 </style>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#findBtn').click(function(){
+		var ss=$('#ss').val();
+		$('#print').html("");
+		if(ss==""){
+			$('#print').html("<font color=red>검색어 입력</font>");
+			$('#ss').focus();
+			return;
+		}
+		$('#ff').submit();
+	});
+});
+</script>
 </head>
 <body>
 <center>
-		<img src="../image/title.gif">
-		<p>
-		<table border="0" width=600>
-			<tr>
-				<td align="left">
-					<a href="board_write.html">
-					<img alt="글쓰기" src="../image/bt_write.jpg" border="0"></a>
-				</td>
-			</tr>
-		</table>
-		
+	<h3>Festigo게시판</h3>
 		<table border="0" width=600>
 			<tr bgcolor="#ccccff" height="27">
 				<th width="10%">번호</th>
@@ -59,32 +64,50 @@
 				<th width="10%">조회수</th>
 			</tr>
 			<tr bgcolor="ivory" height="27">
+				<td width="10%" align="center">5</td>
+				<td width="45%" align="left">
+					<a href="board_content.html">HTML 연습용 게시판 만들기</a>
+				</td>
+				<td width="15%" align="center">조실라</td>
+				<td width="20%" align="center">2017-03-24</td>
+				<td width="10%" align="center">5</td>
+			</tr>
+			<tr bgcolor="ivory" height="27">
+				<td width="10%" align="center">4</td>
+				<td width="45%" align="left">
+					<a href="board_content.html">HTML 연습용 게시판 만들기</a>
+				</td>
+				<td width="15%" align="center">조실라</td>
+				<td width="20%" align="center">2017-03-24</td>
+				<td width="10%" align="center">5</td>
+			</tr>
+			<tr bgcolor="ivory" height="27">
 				<td width="10%" align="center">3</td>
 				<td width="45%" align="left">
 					<a href="board_content.html">HTML 연습용 게시판 만들기</a>
 				</td>
-				<td width="15%" align="center">정도전</td>
-				<td width="20%" align="center">2017-02-28</td>
+				<td width="15%" align="center">조실라</td>
+				<td width="20%" align="center">2017-03-24</td>
 				<td width="10%" align="center">5</td>
 			</tr>
-			<tr bgcolor="white" height="27">
+			<tr bgcolor="ivory" height="27">
 				<td width="10%" align="center">2</td>
 				<td width="45%" align="left">
-					&nbsp;&nbsp;<img alt="댓글" src="../image/icon_reply.gif"><a href="board_content.html">HTML 연습용 게시판 만들기</a>
+					<a href="board_content.html">HTML 연습용 게시판 만들기</a>
 				</td>
-				<td width="15%" align="center">정도전</td>
-				<td width="20%" align="center">2017-02-28</td>
+				<td width="15%" align="center">조실라</td>
+				<td width="20%" align="center">2017-03-24</td>
 				<td width="10%" align="center">5</td>
-			</tr>	
-			<tr bgcolor="white" height="27">
-				<td width="10%" align="center">2</td>
+			</tr>
+			<tr bgcolor="ivory" height="27">
+				<td width="10%" align="center">1</td>
 				<td width="45%" align="left">
-					&nbsp;&nbsp;&nbsp;&nbsp;<img alt="댓글" src="../image/icon_reply.gif"><a href="board_content.html">HTML 연습용 게시판 만들기</a>
+					<a href="board_content.html">HTML 연습용 게시판 만들기</a>
 				</td>
-				<td width="15%" align="center">정도전</td>
-				<td width="20%" align="center">2017-02-28</td>
+				<td width="15%" align="center">조실라</td>
+				<td width="20%" align="center">2017-03-24</td>
 				<td width="10%" align="center">5</td>
-			</tr>					
+			</tr>
 		</table>
 		<hr width=600>
 		
