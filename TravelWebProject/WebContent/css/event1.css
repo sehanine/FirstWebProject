@@ -1,0 +1,14 @@
+@CHARSET "EUC-KR";
+
+#table1 td,tr { padding:10px }
+#table1 tr:nth-child(1) { border-top:3px solid red; }
+#table1 tr { border-bottom:1px solid gray;  }
+.menu a{cursor:pointer; }
+.menu .hide{display:none;}
+.h1_back { background-color: #c8c8c8; padding: 10px; }
+
+#table2 td,tr { padding:10px }
+#table2 tr:nth-child(1) { border-top:3px solid blue; }
+#table2 tr { border-bottom:1px solid gray;  }
+
+#a_color { color:#323C73 !important; }
