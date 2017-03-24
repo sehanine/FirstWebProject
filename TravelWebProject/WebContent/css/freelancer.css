@@ -186,10 +186,10 @@ section.success {
 }
 @media (max-width: 767px) {
   section {
-    padding: 75px 0;
+    padding: 60px 0;
   }
   section.first {
-    padding-top: 75px;
+    padding-top: 60px;
   }
 }
 #portfolio .portfolio-item {
