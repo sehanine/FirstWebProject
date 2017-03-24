@@ -134,7 +134,6 @@ public class QueryDAO {
 				MainVO vo = new MainVO();
 				vo.setFesno(rs.getInt(1));
 				vo.setMaintitle(rs.getString(2));
-				System.out.println(vo.getMaintitle());
 				vo.setMaincontent(rs.getString(3));
 				vo.setMainloc(rs.getString(4));
 				vo.setFesdate(rs.getString(5));
