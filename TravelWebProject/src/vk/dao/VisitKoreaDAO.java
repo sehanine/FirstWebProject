@@ -233,7 +233,4 @@ public class VisitKoreaDAO {
 		}
 		return s;
 	}
-	public static void main(String[] args){
-		new VisitKoreaDAO().getAllData();
-	}
 }
