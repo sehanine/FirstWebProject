@@ -140,10 +140,10 @@ public class QueryDAO {
 				list.add(vo);
 			}
 			rs.close();
-			System.out.println("list done");
-			for(MainVO vo: list){
-				System.out.println(vo.getMaintitle());
-			}
+		
+//			for(MainVO vo: list){
+//				System.out.println(vo.getMaintitle());
+//			}
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
 		}finally{
@@ -273,7 +273,29 @@ public class QueryDAO {
 		}
 		return list;
 	}
-
+	public String getFirstImage(int fesno){
+		String url = null;
+		try{
+			getConnection();
+			String sql = "SELECT image FROM vk_image_list WHERE fesno = ? AND ROWNUM = 1";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, fesno);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+		
+			url = rs.getString(1);
+			
+			ps.close();
+	
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+			url = "img/1.png";
+		}finally{
+			disConnection();
+		}
+		return url;
+	}
 	
 	
 
